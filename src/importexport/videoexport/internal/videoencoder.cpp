@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu::iex::videoexport;
-
+/*
 struct mu::iex::videoexport::FFmpeg {
     int width = 0;
     int height = 0;
@@ -328,7 +328,7 @@ void VideoEncoder::close()
         m_ffmpeg->ppicture = 0;
     }
 
-    /* free the streams */
+
 
     for (unsigned int i = 0; i < m_ffmpeg->formatCtx->nb_streams; i++) {
 #if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 33, 100)
@@ -447,3 +447,4 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
 
     return true;
 }
+*/

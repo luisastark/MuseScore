@@ -68,5 +68,6 @@
         <file>qml/MuseScore/Project/Message.qml</file>
         <file>qml/MuseScore/Project/ScoresListView.qml</file>
         <file>qml/MuseScore/Project/ScoresGridView.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml</file>
     </qresource>
 </RCC>

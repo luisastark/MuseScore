@@ -41,14 +41,5 @@ set(MODULE_LINK
     engraving
     )
 
-# FFmpeg
-find_package(FFmpeg REQUIRED)
-if(NOT FFMPEG_FOUND)
-    message(FATAL_ERROR "Not found ffmpeg")
-endif()
-
-set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${FFMPEG_INCLUDE_DIRS})
-set(MODULE_LINK ${MODULE_LINK} ${FFMPEG_LIBRARIES})
-
 setup_module()
 
