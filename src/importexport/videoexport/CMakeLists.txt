@@ -41,5 +41,25 @@ set(MODULE_LINK
     engraving
     )
 
+# FFmpeg
+set(CMAKE_PREFIX_PATH "C:/ffmpeg")
+# Caminho para FFmpeg local
+set(LOCAL_FFMPEG_PATH "${CMAKE_SOURCE_DIR}/thirdparty/ffmpeg")
+
+set(FFMPEG_INCLUDE_DIRS "${LOCAL_FFMPEG_PATH}/include")
+set(FFMPEG_LIBRARIES
+    "${LOCAL_FFMPEG_PATH}/lib/avcodec.lib"
+    "${LOCAL_FFMPEG_PATH}/lib/avformat.lib"
+    "${LOCAL_FFMPEG_PATH}/lib/avutil.lib"
+    "${LOCAL_FFMPEG_PATH}/lib/swscale.lib"
+    "${LOCAL_FFMPEG_PATH}/lib/swresample.lib"
+)
+
+# Adicionar includes
+include_directories(${FFMPEG_INCLUDE_DIRS})
+
+set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${FFMPEG_INCLUDE_DIRS})
+set(MODULE_LINK ${MODULE_LINK} ${FFMPEG_LIBRARIES})
+
 setup_module()
 

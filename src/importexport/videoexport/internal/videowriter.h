@@ -26,23 +26,26 @@
 #include "../ivideoexportconfiguration.h"
 #include "iapplication.h"
 
-#include "project/iprojectwriter.h"
+#include "context/iglobalcontext.h"
+#include "project/inotationwriter.h"
 
 namespace mu::iex::videoexport {
-class VideoWriter : public project::IProjectWriter, public muse::Injectable
+class VideoWriter : public project::INotationWriter, public muse::Injectable
 {
     muse::Inject<IVideoExportConfiguration> configuration;
     muse::Inject<muse::IApplication> application;
 
 public:
+    muse::Inject<context::IGlobalContext> globalContext = { this };
     VideoWriter(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    muse::Ret write(project::INotationProjectPtr project, QIODevice& device, const Options& options = Options()) override;
-    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Options& options = Options()) override;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
+                  const Options& options = Options()) override;
 
 private:
 
@@ -56,7 +59,7 @@ private:
         float trailingSec = 3.;
     };
 
-    muse::Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config);
+    muse::Ret generatePagedOriginalVideo(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Config& config);
 };
 }
 

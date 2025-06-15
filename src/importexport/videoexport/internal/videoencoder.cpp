@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu::iex::videoexport;
-/*
+
 struct mu::iex::videoexport::FFmpeg {
     int width = 0;
     int height = 0;
@@ -447,4 +447,4 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
 
     return true;
 }
-*/
+
