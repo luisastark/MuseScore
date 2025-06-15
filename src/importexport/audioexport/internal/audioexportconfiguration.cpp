@@ -34,6 +34,7 @@ static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/m
 
 void AudioExportConfiguration::init()
 {
+    std::cerr << "[DBG a.c] init \n";
     settings()->setDefaultValue(EXPORT_SAMPLE_RATE_KEY, Val(44100));
     settings()->setDefaultValue(EXPORT_MP3_BITRATE, Val(128));
 }
@@ -61,21 +62,25 @@ const std::vector<int>& AudioExportConfiguration::availableMp3BitRates() const
 
 int AudioExportConfiguration::exportSampleRate() const
 {
+    std::cerr << "[DBG a.c] exportSaRa \n";
     return settings()->value(EXPORT_SAMPLE_RATE_KEY).toInt();
 }
 
 void AudioExportConfiguration::setExportSampleRate(int rate)
 {
+    std::cerr << "[DBG a.c] setExportSaRa \n";
     settings()->setSharedValue(EXPORT_SAMPLE_RATE_KEY, Val(rate));
 }
 
 const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
 {
+    std::cerr << "[DBG a.c] availableSaRa \n";
     static const std::vector<int> rates { 32000, 44100, 48000 };
     return rates;
 }
 
 samples_t AudioExportConfiguration::exportBufferSize() const
 {
+    std::cerr << "[DBG a.c] ! expBufSize \n";
     return 4096;
 }

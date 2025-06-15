@@ -34,6 +34,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
+#include "importexport/videoexport/ivideoexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 
 #include "inotationwritersregister.h"
@@ -56,6 +57,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
     INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
     INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
     INJECT(IExportProjectScenario, exportProjectScenario)
 
@@ -80,6 +82,10 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
+
+    Q_PROPERTY(int fps READ fps WRITE setFps NOTIFY fpsChanged)
+    Q_PROPERTY(QString videoResolution READ videoResolution WRITE setVideoResolution NOTIFY videoResolutionChanged)
+    //Q_PROPERTY(int videoFramerate READ videoFramerate WRITE setVideoFramerate NOTIFY videoFramerateChanged)
 
     Q_PROPERTY(bool midiExpandRepeats READ midiExpandRepeats WRITE setMidiExpandRepeats NOTIFY midiExpandRepeatsChanged)
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
@@ -145,6 +151,21 @@ public:
     int bitRate() const;
     void setBitRate(int bitRate);
 
+    QString videoResolution() const;
+    void setVideoResolution(const QString& resolution);
+    Q_INVOKABLE QVariantList availableVideoResolutions() const
+    {
+        QVariantList list;
+        list.append(QVariantMap{{"text", "1920x1080 (Full HD)"}, {"value", "1080p"}});
+        list.append(QVariantMap{{"text", "1280x720 (HD)"}, {"value", "720p"}});
+        list.append(QVariantMap{{"text", "854x480 (SD)"}, {"value", "480p"}});
+        list.append(QVariantMap{{"text", "640x360 (nHD)"}, {"value", "360p"}});
+        return list;
+    }
+    Q_INVOKABLE QList<int> availableFps() const;
+    int fps() const;
+    void setFps(int fps);
+
     bool midiExpandRepeats() const;
     void setMidiExpandRepeats(bool expandRepeats);
 
@@ -193,6 +214,9 @@ signals:
     void sampleRateChanged(int sampleRate);
     void availableBitRatesChanged();
     void bitRateChanged(int bitRate);
+
+    void videoResolutionChanged(QString resolution);
+    void fpsChanged(int framerate);
 
     void midiExpandRepeatsChanged(bool expandRepeats);
     void midiExportRpnsChanged(bool exportRpns);

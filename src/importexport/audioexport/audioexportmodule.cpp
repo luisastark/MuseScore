@@ -40,11 +40,13 @@ using namespace mu::project;
 
 std::string AudioExportModule::moduleName() const
 {
+    std::cerr << "[DBG am.c] modname \n";
     return "iex_audioexport";
 }
 
 void AudioExportModule::registerExports()
 {
+    std::cerr << "[DBG am.c] regExp \n";
     m_configuration = std::make_shared<AudioExportConfiguration>();
 
     ioc()->registerExport<AudioExportConfiguration>(moduleName(), m_configuration);
@@ -52,6 +54,7 @@ void AudioExportModule::registerExports()
 
 void AudioExportModule::resolveImports()
 {
+    std::cerr << "[DBG am.c] resimp \n";
     auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "wav" }, std::make_shared<WaveWriter>(iocContext()));
@@ -63,6 +66,7 @@ void AudioExportModule::resolveImports()
 
 void AudioExportModule::onInit(const IApplication::RunMode& mode)
 {
+    std::cerr << "[DBG am.c] oninit \n";
     if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }

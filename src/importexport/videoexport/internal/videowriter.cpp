@@ -104,8 +104,8 @@ muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t
     }
     cfg.bitrate = int(br * 1000000);
 
-    cfg.leadingSec = configuration()->leadingSec();
-    cfg.trailingSec = configuration()->trailingSec();
+    //cfg.leadingSec = configuration()->leadingSec();
+    //cfg.trailingSec = configuration()->trailingSec();
 
     muse::Ret ret = generatePagedOriginalVideo(project, filePath, cfg);
     return ret;
@@ -227,13 +227,13 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
         tick_t tick = playback->secToTick(currentTimeSec);
 
-        const Page* page = pageByTick(pages, tick);
+        //const Page* page = pageByTick(pages, tick);
         if (!page) {
             break;
         }
 
         INotationPainting::Options opt;
-        opt.fromPage = page->no();
+        //opt.fromPage = page->no();
         opt.toPage = opt.fromPage;
         opt.deviceDpi = CANVAS_DPI;
 

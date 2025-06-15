@@ -30,36 +30,51 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::iex::videoexport;
 using namespace mu::project;
 using namespace muse::modularity;
 
 static std::shared_ptr<VideoExportConfiguration> s_configuration = std::make_shared<VideoExportConfiguration>();
 
-static void videoexport_init_qrc()
-{
-    Q_INIT_RESOURCE(videoexport);
-}
 
 std::string VideoExportModule::moduleName() const
 {
+    std::cerr << "[DBG vm.c] modname \n";
     return "iex_videoexport";
 }
 
+/*static void videoexport_init_qrc()
+{
+    Q_INIT_RESOURCE(videoexport);
+}
 void VideoExportModule::registerResources()
 {
     videoexport_init_qrc();
-}
+}*/
 
 void VideoExportModule::registerExports()
 {
+    std::cerr << "[DBG vm.c] regExp \n";
+    s_configuration = std::make_shared<VideoExportConfiguration>();
     ioc()->registerExport<VideoExportConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IVideoExportConfiguration>(moduleName(), s_configuration);
 }
 
 void VideoExportModule::resolveImports()
 {
+    std::cerr << "[DBG vm.c] resImp \n";
     auto projectRWreg = ioc()->resolve<IProjectRWRegister>(moduleName());
     if (projectRWreg) {
-        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>());
+        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
     }
+}
+void VideoExportModule::onInit(const IApplication::RunMode& mode)
+{
+    std::cerr << "[DBG vm.c] oninit \n";
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    s_configuration->init();
 }

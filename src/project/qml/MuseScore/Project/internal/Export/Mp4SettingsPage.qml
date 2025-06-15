@@ -48,10 +48,10 @@ ExportSettingsPage {
                 { text: "640x360 (nHD)", value: "360p" }
             ]
 
-            currentIndex: indexOfValue(root.model.resolution)
+            currentIndex: indexOfValue(root.model.videoResolution)
 
             onActivated: function(index, value) {
-                root.model.resolution = value
+                root.model.videoResolution = value
             }
         }
     }
@@ -68,16 +68,14 @@ ExportSettingsPage {
             navigation.row: root.navigationOrder + 2
             navigation.accessible.name: framerateLabel.text + " " + currentText
 
-            model: [
-                { text: "60 fps", value: 60 },
-                { text: "30 fps", value: 30 },
-                { text: "24 fps", value: 24 }
-            ]
+            model: root.model.availableFps().map(function(fps) {
+                return { text: qsTrc("project/export", "%1 fps").arg(fps), value: fps }
+            })
 
-            currentIndex: indexOfValue(root.model.framerate)
+            currentIndex: indexOfValue(root.model.fps)
 
             onActivated: function(index, value) {
-                root.model.framerate = value
+                root.model.fps = value
             }
         }
     }

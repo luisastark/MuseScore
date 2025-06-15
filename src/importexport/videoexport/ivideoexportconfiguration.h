@@ -27,7 +27,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "videoexporttypes.h"
+//#include "videoexporttypes.h"
 
 namespace mu::iex::videoexport {
 class IVideoExportConfiguration : MODULE_EXPORT_INTERFACE
@@ -37,25 +37,26 @@ class IVideoExportConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IVideoExportConfiguration() = default;
 
-    virtual ViewMode viewMode() const = 0;
+    /*virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(std::optional<ViewMode> viewMode) = 0;
 
     virtual bool showPiano() const = 0;
     virtual void setShowPiano(std::optional<bool> showPiano) = 0;
     virtual PianoPosition pianoPosition() const = 0;
-    virtual void setPianoPosition(std::optional<PianoPosition> position) = 0;
+    virtual void setPianoPosition(std::optional<PianoPosition> position) = 0;*/
 
     virtual std::string resolution() const = 0;
     virtual void setResolution(std::optional<std::string> resolution) = 0;
 
     virtual int fps() const = 0;
-    virtual void setFps(std::optional<int> fps) = 0;
+    virtual void setFps(int fps) = 0;
+    virtual const std::vector<int>& availableFps() const = 0;
 
-    virtual double leadingSec() const = 0;
+    /*virtual double leadingSec() const = 0;
     virtual void setLeadingSec(std::optional<double> leadingSec) = 0;
 
     virtual double trailingSec() const = 0;
-    virtual void setTrailingSec(std::optional<double> trailingSec) = 0;
+    virtual void setTrailingSec(std::optional<double> trailingSec) = 0;*/
 };
 }
 

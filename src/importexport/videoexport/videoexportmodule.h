@@ -25,13 +25,17 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::videoexport {
+class VideoExportConfiguration;
 class VideoExportModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
-    void registerResources() override;
+    //void registerResources() override;
     void registerExports() override;
     void resolveImports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+private:
+    std::shared_ptr<VideoExportConfiguration> s_configuration;
 };
 }
 

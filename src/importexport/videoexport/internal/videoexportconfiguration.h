@@ -24,42 +24,44 @@
 
 #include "../ivideoexportconfiguration.h"
 
-#include "../videoexporttypes.h"
+//#include "../videoexporttypes.h"
 
 namespace mu::iex::videoexport {
 class VideoExportConfiguration : public IVideoExportConfiguration
 {
 public:
-    VideoExportConfiguration() = default;
+    //VideoExportConfiguration();
+    void init();
 
-    ViewMode viewMode() const override;
+    /*ViewMode viewMode() const override;
     void setViewMode(std::optional<ViewMode> viewMode) override;
 
     bool showPiano() const override;
     void setShowPiano(std::optional<bool> showPiano) override;
     PianoPosition pianoPosition() const override;
-    void setPianoPosition(std::optional<PianoPosition> position) override;
+    void setPianoPosition(std::optional<PianoPosition> position) override;*/
 
     std::string resolution() const override;
     void setResolution(std::optional<std::string> resolution) override;
 
     int fps() const override;
-    void setFps(std::optional<int> fps) override;
+    void setFps(int fps) override;
+    const std::vector<int>& availableFps() const override;
 
-    double leadingSec() const override;
+    /*double leadingSec() const override;
     void setLeadingSec(std::optional<double> leadingSec) override;
 
     double trailingSec() const override;
-    void setTrailingSec(std::optional<double> trailingSec) override;
+    void setTrailingSec(std::optional<double> trailingSec) override;*/
 
 private:
-    std::optional<ViewMode> m_viewMode = std::nullopt;
+    /*std::optional<ViewMode> m_viewMode = std::nullopt;
     std::optional<bool> m_showPiano = std::nullopt;
     std::optional<PianoPosition> m_pianoPosition = std::nullopt;
-    std::optional<std::string> m_resolution = std::nullopt;
     std::optional<int> m_fps = std::nullopt;
     std::optional<double> m_leadingSec = std::nullopt;
-    std::optional<double> m_trailingSec = std::nullopt;
+    std::optional<double> m_trailingSec = std::nullopt;*/
+    std::optional<std::string> m_resolution = std::nullopt;
 };
 }
 

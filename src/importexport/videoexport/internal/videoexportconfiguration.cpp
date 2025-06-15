@@ -21,15 +21,39 @@
  */
 #include "videoexportconfiguration.h"
 
+#include "settings.h"
+
+using namespace muse;
+using namespace mu;
 using namespace mu::iex::videoexport;
 
-static const ViewMode DEFAULT_VIEW_MODE = ViewMode::Auto;
+/*static const ViewMode DEFAULT_VIEW_MODE = ViewMode::Auto;
 static const bool DEFAULT_SHOW_PIANO = false;
 static const PianoPosition DEFAULT_PIANO_POSITION = PianoPosition::Bottom;
-static const std::string DEFAULT_RESOLUTION = "1080p";
-static const int DEFAULT_FPS = 24;
 static const double DEFAULT_LEADING_SEC = 3.0;
 static const double DEFAULT_TRAILING_SECONDS = 3.0;
+static const std::string DEFAULT_RESOLUTION = "1080p";
+static const int DEFAULT_FPS = 24;*/
+
+static const Settings::Key EXPORT_FPS_RATE_KEY("iex_videoexport", "export/video/fps");
+static const Settings::Key EXPORT_MP4_RESOLUTION("iex_videoexport", "export/video/mp4Resolution");
+
+void VideoExportConfiguration::init()
+{
+    std::cerr << "[DBG v.c] init \n";
+    settings()->setDefaultValue(EXPORT_FPS_RATE_KEY, Val(24));
+    settings()->setDefaultValue(EXPORT_MP4_RESOLUTION, Val(1080));
+}
+
+/*VideoExportConfiguration::VideoExportConfiguration()
+    : m_viewMode(ViewMode::Auto),
+    m_showPiano(false),
+    m_pianoPosition(PianoPosition::Bottom),
+    m_resolution(std::optional<std::string>("1080p")),
+    m_fps(30),
+    m_leadingSec(0.5),
+    m_trailingSec(0.5)
+{}
 
 ViewMode VideoExportConfiguration::viewMode() const
 {
@@ -59,29 +83,39 @@ PianoPosition VideoExportConfiguration::pianoPosition() const
 void VideoExportConfiguration::setPianoPosition(std::optional<PianoPosition> position)
 {
     m_pianoPosition = position;
-}
+}*/
 
 std::string VideoExportConfiguration::resolution() const
 {
-    return m_resolution ? m_resolution.value() : DEFAULT_RESOLUTION;
+    std::cerr << "[DBG v.c] res() \n";
+    return m_resolution.value_or("1080p");
 }
 
 void VideoExportConfiguration::setResolution(std::optional<std::string> resolution)
 {
+    std::cerr << "[DBG v.c] setres \n";
     m_resolution = resolution;
 }
 
 int VideoExportConfiguration::fps() const
 {
-    return m_fps ? m_fps.value() : DEFAULT_FPS;
+    std::cerr << "[DBG v.c] fps() \n";
+    return settings()->value(EXPORT_FPS_RATE_KEY).toInt();
 }
 
-void VideoExportConfiguration::setFps(std::optional<int> fps)
+void VideoExportConfiguration::setFps(int fps)
 {
-    m_fps = fps;
+    std::cerr << "[DBG v.c] setfps \n";
+    settings()->setSharedValue(EXPORT_FPS_RATE_KEY, Val(fps));
 }
 
-double VideoExportConfiguration::leadingSec() const
+const std::vector<int>& VideoExportConfiguration::availableFps() const
+{
+    std::cerr << "[DBG v.c] availablefps \n";
+    static const std::vector<int> rates { 10, 24, 48 };
+    return rates;
+}
+/*double VideoExportConfiguration::leadingSec() const
 {
     return m_leadingSec ? m_leadingSec.value() : DEFAULT_LEADING_SEC;
 }
@@ -99,4 +133,4 @@ double VideoExportConfiguration::trailingSec() const
 void VideoExportConfiguration::setTrailingSec(std::optional<double> trailingSec)
 {
     m_trailingSec = trailingSec;
-}
+}*/

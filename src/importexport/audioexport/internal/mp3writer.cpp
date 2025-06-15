@@ -30,6 +30,7 @@ using namespace mu::iex::audioexport;
 
 Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
+    std::cerr << "[DBG mp3w.c]  \n";
     const SoundTrackFormat format {
         SoundTrackType::MP3,
         static_cast<sample_rate_t>(configuration()->exportSampleRate()),

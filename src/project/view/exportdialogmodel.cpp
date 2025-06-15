@@ -22,6 +22,7 @@
 #include "exportdialogmodel.h"
 
 #include <QItemSelectionModel>
+#include <QDebug>
 
 #include "async/async.h"
 #include "translation.h"
@@ -42,6 +43,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
     , m_selectedUnitType(DEFAULT_EXPORT_UNITTYPE)
 {
     connect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, &ExportDialogModel::selectionChanged);
+    std::cerr << "[DBG] ExportDialogModel connected!\n";
 
     ExportTypeList musicXmlTypes {
         ExportType::makeWithSuffixes({ "mxl" },
@@ -108,7 +110,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "MEI files"),
                                      "MeiSettingsPage.qml")
     };
-
+    std::cerr << "[DBG] ExportDialogModel typelist done\n";
     ExportInfo info = exportProjectScenario()->exportInfo();
     if (info.id == "") {
         setExportType(m_exportTypeList.front());
@@ -487,17 +489,20 @@ void ExportDialogModel::setSvgIllustratorCompat(bool compat)
 
 QList<int> ExportDialogModel::availableSampleRates() const
 {
+    std::cerr << "[DBG E.c] availableSaRa \n";
     const std::vector<int>& rates = audioExportConfiguration()->availableSampleRates();
     return QList<int>(rates.cbegin(), rates.cend());
 }
 
 int ExportDialogModel::sampleRate() const
 {
+    std::cerr << "[DBG E.c] sampleRate() \n";
     return audioExportConfiguration()->exportSampleRate();
 }
 
 void ExportDialogModel::setSampleRate(int rate)
 {
+    std::cerr << "[DBG E.c] setSampleRate \n";
     if (rate == sampleRate()) {
         return;
     }
@@ -516,7 +521,6 @@ int ExportDialogModel::bitRate() const
 {
     return audioExportConfiguration()->exportMp3Bitrate();
 }
-
 void ExportDialogModel::setBitRate(int rate)
 {
     if (rate == bitRate()) {
@@ -525,6 +529,52 @@ void ExportDialogModel::setBitRate(int rate)
 
     audioExportConfiguration()->setExportMp3Bitrate(rate);
     emit bitRateChanged(rate);
+}
+
+QString ExportDialogModel::videoResolution() const
+{
+    std::cerr << "[DBG E.c] videoexpconfig:" << videoExportConfiguration().get();
+    return QString::fromStdString(videoExportConfiguration()->resolution());
+}
+
+void ExportDialogModel::setVideoResolution(const QString& res)
+{
+    std::cerr << "[DBG E.c] setVidRes\n";
+    if (res == videoResolution())
+        return;
+
+    videoExportConfiguration()->setResolution(std::optional<std::string>(res.toStdString()));
+    emit videoResolutionChanged(res);
+}
+QList<int> ExportDialogModel::availableFps() const
+{
+    auto cfg = videoExportConfiguration();
+    qDebug() << "cfg =" << cfg.get();   // imprime 0x0 ou endereço
+
+    if (!cfg) {
+        qWarning() << "cfg é nullptr";
+        return {31};  // devolve fallback só para não cair
+    }
+
+    std::cerr << "[DBG E.c] availablefps \n";
+    std::cerr <<"DBG: videoExportConfiguration ptr =" << videoExportConfiguration().get();
+    const std::vector<int>& rates = videoExportConfiguration()->availableFps();
+    return QList<int>(rates.cbegin(), rates.cend());
+}
+int ExportDialogModel::fps() const
+{
+    std::cerr << "[DBG E.c] fps() \n";
+    return videoExportConfiguration()->fps();
+}
+
+void ExportDialogModel::setFps(int ffps)
+{
+    std::cerr << "[DBG E.c] setFps \n";
+    if (ffps == fps())
+        return;
+
+    videoExportConfiguration()->setFps(ffps);
+    emit fpsChanged(ffps);
 }
 
 bool ExportDialogModel::midiExpandRepeats() const
