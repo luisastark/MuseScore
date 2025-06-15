@@ -39,7 +39,7 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
-std::vector<IProjectWriter::UnitType> VideoWriter::supportedUnitTypes() const
+std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
 }
@@ -50,14 +50,17 @@ bool VideoWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-muse::Ret VideoWriter::write(INotationProjectPtr, QIODevice&, const Options&)
+muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& dstDevice, const Options&)
 {
-    NOT_SUPPORTED;
-    return make_ret(muse::Ret::Code::NotSupported);
-}
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(muse::Ret::Code::UnknownError);
+    }
 
-muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const Options&)
-{
+    mu::engraving::Score* score = notation->elements()->msScore();
+    IF_ASSERT_FAILED(score) {
+        return make_ret(muse::Ret::Code::UnknownError);
+    }
+
     Config cfg;
 
     cfg.fps = configuration()->fps();
@@ -107,13 +110,18 @@ muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t
     cfg.leadingSec = configuration()->leadingSec();
     cfg.trailingSec = configuration()->trailingSec();
 
-    muse::Ret ret = generatePagedOriginalVideo(project, filePath, cfg);
+    muse::Ret ret = generatePagedOriginalVideo(notation, dstDevice, cfg);
     return ret;
 }
 
-muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config)
+muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, muse::io::IODevice& dstDevice, const Config& config)
 {
     // --score-video -o ./simple5.mp4 ./simple5.mscz
+
+    QString filePath = QString::fromStdString(dstDevice.meta("file_path"));
+    IF_ASSERT_FAILED(!filePath.isEmpty()) {
+        return make_ret(muse::Ret::Code::InternalError);
+    }
 
     VideoEncoder encoder;
     if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
@@ -121,12 +129,12 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
         return make_ret(muse::Ret::Code::UnknownError);
     }
 
-    IMasterNotationPtr masterNotation = project->masterNotation();
+    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation() ;
 
-    engraving::MasterScore* score = masterNotation->notation()->elements()->msScore()->masterScore();
+    engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
 
     // Setup Score view
-    masterNotation->notation()->setViewMode(notation::ViewMode::PAGE);
+    notation->setViewMode(notation::ViewMode::PAGE);
     score->setShowFrames(false);
     score->setShowInstrumentNames(false);
     score->setShowInvisible(false);
@@ -136,7 +144,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     score->doLayout();
 
-    PageList pages = masterNotation->notation()->elements()->pages();
+    PageList pages = notation->elements()->pages();
     if (pages.empty()) {
         LOGE() << "No pages";
         return make_ret(muse::Ret::Code::UnknownError);
@@ -188,7 +196,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     Painter painter(&qp, "video_writer");
 
-    auto painting = masterNotation->notation()->painting();
+    auto painting = notation->painting();
 
     // Setup duration
     INotationPlaybackPtr playback = masterNotation->playback();
@@ -255,4 +263,9 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
     encoder.close();
 
     return muse::make_ok();
+}
+muse::Ret VideoWriter::writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)
+{
+    NOT_SUPPORTED;
+    return make_ret(muse::Ret::Code::NotSupported);
 }

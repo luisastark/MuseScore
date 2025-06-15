@@ -526,7 +526,62 @@ void ExportDialogModel::setBitRate(int rate)
     audioExportConfiguration()->setExportMp3Bitrate(rate);
     emit bitRateChanged(rate);
 }
-
+mu::iex::videoexport::ViewMode ExportDialogModel::mp4viewMode() const
+{
+    return videoExportConfiguration()->viewMode();
+}
+void ExportDialogModel::setMp4viewMode(mu::iex::videoexport::ViewMode viewMode)
+{
+    return videoExportConfiguration()->setViewMode(viewMode);
+}
+bool ExportDialogModel::mp4showPiano() const
+{
+    return videoExportConfiguration()->showPiano();
+}
+void ExportDialogModel::setMp4showPiano(bool showPiano)
+{
+    return videoExportConfiguration()->setShowPiano(showPiano);
+}
+mu::iex::videoexport::PianoPosition ExportDialogModel::mp4PianoPosition() const
+{
+    return videoExportConfiguration()->pianoPosition();
+}
+void ExportDialogModel::setMp4PianoPosition(mu::iex::videoexport::PianoPosition position)
+{
+    return videoExportConfiguration()->setPianoPosition(position);
+}
+std::string ExportDialogModel::mp4Resolution() const
+{
+    return videoExportConfiguration()->resolution();
+}
+void ExportDialogModel::setMp4Resolution(std::string resolution)
+{
+    return videoExportConfiguration()->setResolution(resolution);
+}
+int ExportDialogModel::mp4Fps() const
+{
+    return videoExportConfiguration()->fps();
+}
+void ExportDialogModel::setMp4Fps(int fps)
+{
+    return videoExportConfiguration()->setFps(fps);
+}
+double ExportDialogModel::mp4LeadingSec() const
+{
+    return videoExportConfiguration()->leadingSec();
+}
+void ExportDialogModel::setMp4LeadingSec(double leadingSec)
+{
+    return videoExportConfiguration()->setLeadingSec(leadingSec);
+}
+double ExportDialogModel::mp4TrailingSec() const
+{
+    return videoExportConfiguration()->trailingSec();
+}
+void ExportDialogModel::setMp4TrailingSec(double trailingSec)
+{
+    return videoExportConfiguration()->setTrailingSec(trailingSec);
+}
 bool ExportDialogModel::midiExpandRepeats() const
 {
     return midiImportExportConfiguration()->isExpandRepeats();

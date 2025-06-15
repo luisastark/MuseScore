@@ -31,7 +31,6 @@ if (MUE_BUILD_IMPORTEXPORT_MODULE)
     add_subdirectory(imagesexport)
     add_subdirectory(guitarpro)
     add_subdirectory(mei)
-    set(MUE_BUILD_VIDEOEXPORT_MODULE ON)
 
     if (MUE_BUILD_VIDEOEXPORT_MODULE)
         add_subdirectory(videoexport)

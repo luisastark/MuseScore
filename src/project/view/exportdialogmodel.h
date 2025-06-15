@@ -34,6 +34,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
+#include "importexport/videoexport/ivideoexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 
 #include "inotationwritersregister.h"
@@ -56,6 +57,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
     INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
     INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
     INJECT(IExportProjectScenario, exportProjectScenario)
 
@@ -145,6 +147,27 @@ public:
     int bitRate() const;
     void setBitRate(int bitRate);
 
+    iex::videoexport::ViewMode mp4viewMode() const;
+    void setMp4viewMode(iex::videoexport::ViewMode  viewMode);
+    
+    bool mp4showPiano() const;
+    void setMp4showPiano(bool showPiano);
+
+    iex::videoexport::PianoPosition mp4PianoPosition() const;
+    void setMp4PianoPosition(iex::videoexport::PianoPosition position);
+   
+    std::string mp4Resolution() const;
+    void setMp4Resolution(std::string resolution);
+    
+    int mp4Fps() const;
+    void setMp4Fps(int fps);
+    
+    double mp4LeadingSec() const;
+    void setMp4LeadingSec(double leadingSec);
+    
+    double mp4TrailingSec() const;
+    void setMp4TrailingSec(double trailingSec);
+    
     bool midiExpandRepeats() const;
     void setMidiExpandRepeats(bool expandRepeats);
 

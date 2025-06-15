@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/*#ifndef MU_IMPORTEXPORT_FFMPEG_H
+#ifndef MU_IMPORTEXPORT_FFMPEG_H
 #define MU_IMPORTEXPORT_FFMPEG_H
 
 #include <stdint.h>
@@ -37,4 +37,4 @@ extern "C" {
 #endif
 }
 
-#endif // MU_IMPORTEXPORT_FFMPEG_H*/
+#endif // MU_IMPORTEXPORT_FFMPEG_H
