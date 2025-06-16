@@ -1,5 +1,5 @@
 #include "appfactory.h"
-
+#include <iostream>
 #include "internal/guiapp.h"
 #include "internal/consoleapp.h"
 
@@ -131,6 +131,7 @@
 #include "engraving/engravingmodule.h"
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
 #include "importexport/bww/bwwmodule.h"
@@ -288,10 +289,12 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::iex::musedata::MuseDataModule());
     app->addModule(new mu::iex::ove::OveModule());
     app->addModule(new mu::iex::audioexport::AudioExportModule());
+    std::cout << "[DBG AppFactory] registered AudioExportModule\n";
     app->addModule(new mu::iex::imagesexport::ImagesExportModule());
     app->addModule(new mu::iex::mei::MeiModule());
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
+    std::cout << "[DBG AppFactory] registered VideoExportModule\n";
 #endif
 #else
 #ifdef MUE_BUILD_IMAGESEXPORT_MODULE

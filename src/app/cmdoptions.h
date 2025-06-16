@@ -69,9 +69,6 @@ struct CmdOptions {
 
     struct {
         std::optional<std::string> resolution;
-        std::optional<int> fps;
-        std::optional<double> leadingSec;
-        std::optional<double> trailingSec;
     } exportVideo;
 
     struct {

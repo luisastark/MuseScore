@@ -28,7 +28,7 @@
 
 #include "context/iglobalcontext.h"
 #include "project/inotationwriter.h"
-
+/*
 namespace mu::iex::videoexport {
 class VideoWriter : public project::INotationWriter, public muse::Injectable
 {
@@ -55,12 +55,10 @@ private:
         int height = 1080;
         int fps = 24;
         int bitrate = 800000;
-        float leadingSec = 3.;
-        float trailingSec = 3.;
     };
 
     muse::Ret generatePagedOriginalVideo(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Config& config);
 };
 }
-
+*/
 #endif // MU_IMPORTEXPORT_VIDEOWRITER_H

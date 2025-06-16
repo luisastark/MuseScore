@@ -39,7 +39,7 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
-std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
+/*std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
 }
@@ -106,8 +106,6 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& dstDevic
     }
     cfg.bitrate = int(br * 1000000);
 
-    //cfg.leadingSec = configuration()->leadingSec();
-    //cfg.trailingSec = configuration()->trailingSec();
 
     muse::Ret ret = generatePagedOriginalVideo(notation, dstDevice, cfg);
     return ret;
@@ -202,7 +200,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, muse::i
 
     LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec";
 
-    int frameCount = (totalPlayTimeSec + config.leadingSec + config.trailingSec) * config.fps;
+    //int frameCount = (totalPlayTimeSec + config.leadingSec + config.trailingSec) * config.fps;
 
     //! NOTE: After setting the score above, the number of pages may change - get them again
     pages = masterNotation->notation()->elements()->pages();
@@ -221,42 +219,6 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, muse::i
     PlaybackCursor cursor(application()->iocContext());
     cursor.setNotation(masterNotation->notation());
 
-    for (int f = 0; f < frameCount; f++) {
-        float currentTimeSec = (qreal)f / config.fps;
-        currentTimeSec -= config.leadingSec;
-        if (currentTimeSec <= 0) {
-            currentTimeSec = 0;
-        }
-        if (currentTimeSec > totalPlayTimeSec) {
-            currentTimeSec = totalPlayTimeSec;
-        }
-
-        tick_t tick = playback->secToTick(currentTimeSec);
-
-        //const Page* page = pageByTick(pages, tick);
-        if (!page) {
-            break;
-        }
-
-        INotationPainting::Options opt;
-        //opt.fromPage = page->no();
-        opt.toPage = opt.fromPage;
-        opt.deviceDpi = CANVAS_DPI;
-
-        painter.fillRect(frameRect, Color::WHITE);
-
-        painting->paintPrint(&painter, opt);
-
-        cursor.move(tick);
-
-        muse::RectF cursorRect = cursor.rect();
-        muse::PointF pagePos = page->pos();
-        muse::RectF cursorAbsRect = cursorRect.translated(-pagePos);
-
-        painter.fillRect(cursorAbsRect, CURSOR_COLOR);
-
-        encoder.encodeImage(frame);
-    }
 
     encoder.close();
 
@@ -267,3 +229,4 @@ muse::Ret VideoWriter::writeList(const notation::INotationPtrList&, muse::io::IO
     NOT_SUPPORTED;
     return make_ret(muse::Ret::Code::NotSupported);
 }
+*/

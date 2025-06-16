@@ -23,7 +23,7 @@
 ###########################################
 
 set(EXECUTABLE_NAME mscore)
-
+set(MUE_BUILD_VIDEOEXPORT_MODULE ON)
 ###########################################
 # Platform specific
 ###########################################

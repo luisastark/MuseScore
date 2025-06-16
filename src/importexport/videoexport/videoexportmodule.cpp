@@ -35,7 +35,7 @@ using namespace mu::iex::videoexport;
 using namespace mu::project;
 using namespace muse::modularity;
 
-static std::shared_ptr<VideoExportConfiguration> s_configuration = std::make_shared<VideoExportConfiguration>();
+static std::shared_ptr<VideoExportConfiguration> m_configuration = std::make_shared<VideoExportConfiguration>();
 
 
 std::string VideoExportModule::moduleName() const
@@ -56,9 +56,9 @@ void VideoExportModule::registerResources()
 void VideoExportModule::registerExports()
 {
     std::cerr << "[DBG vm.c] regExp \n";
-    s_configuration = std::make_shared<VideoExportConfiguration>();
-    ioc()->registerExport<VideoExportConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IVideoExportConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<VideoExportConfiguration>();
+ioc()->registerExport<VideoExportConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IVideoExportConfiguration>(moduleName(), m_configuration);
 }
 
 void VideoExportModule::resolveImports()
@@ -66,7 +66,7 @@ void VideoExportModule::resolveImports()
     std::cerr << "[DBG vm.c] resImp \n";
     auto projectRWreg = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (projectRWreg) {
-        projectRWreg->reg({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
+        //projectRWreg->reg({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
     }
 }
 void VideoExportModule::onInit(const IApplication::RunMode& mode)
@@ -76,5 +76,5 @@ void VideoExportModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    s_configuration->init();
+    m_configuration->init();
 }

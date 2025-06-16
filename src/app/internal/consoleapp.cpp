@@ -239,9 +239,6 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
 
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     videoExportConfiguration()->setResolution(options.exportVideo.resolution);
-    videoExportConfiguration()->setFps(options.exportVideo.fps);
-    videoExportConfiguration()->setLeadingSec(options.exportVideo.leadingSec);
-    videoExportConfiguration()->setTrailingSec(options.exportVideo.trailingSec);
 #endif
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE

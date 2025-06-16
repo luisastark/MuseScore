@@ -44,7 +44,8 @@ set(MODULE_LINK
 # FFmpeg
 set(CMAKE_PREFIX_PATH "C:/ffmpeg")
 # Caminho para FFmpeg local
-set(LOCAL_FFMPEG_PATH "${CMAKE_SOURCE_DIR}/thirdparty/ffmpeg")
+
+set(LOCAL_FFMPEG_PATH "${PROJECT_SOURCE_DIR}/thirdparty/ffmpeg")
 
 set(FFMPEG_INCLUDE_DIRS "${LOCAL_FFMPEG_PATH}/include")
 set(FFMPEG_LIBRARIES

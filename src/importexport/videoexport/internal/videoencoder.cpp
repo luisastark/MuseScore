@@ -24,7 +24,7 @@
 #include "ffmpeg.h"
 
 #include "log.h"
-
+/*
 using namespace mu::iex::videoexport;
 
 struct mu::iex::videoexport::FFmpeg {
@@ -446,5 +446,5 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
     sws_scale(m_ffmpeg->img_convert_ctx, srcplanes, srcstride, 0, m_ffmpeg->height, m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize);
 
     return true;
-}
+}*/
 

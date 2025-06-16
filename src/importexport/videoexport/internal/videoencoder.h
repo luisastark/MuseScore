@@ -25,7 +25,7 @@
 #include <QImage>
 
 #include "io/path.h"
-
+/*
 namespace mu::iex::videoexport {
 struct FFmpeg;
 class VideoEncoder
@@ -45,6 +45,6 @@ private:
 
     FFmpeg* m_ffmpeg = nullptr;
 };
-}
+}*/
 
 #endif // MU_IMPORTEXPORT_VIDEOENCODER_H

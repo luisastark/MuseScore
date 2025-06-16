@@ -35,7 +35,7 @@ public:
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
 private:
-    std::shared_ptr<VideoExportConfiguration> s_configuration;
+    std::shared_ptr<VideoExportConfiguration> m_configuration;
 };
 }
 

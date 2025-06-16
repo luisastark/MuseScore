@@ -400,17 +400,7 @@ void CommandLineParser::parse(int argc, char** argv)
             m_options.exportVideo.resolution = m_parser.value("resolution").toStdString();
         }
 
-        if (m_parser.isSet("fps")) {
-            m_options.exportVideo.fps = intValue("fps");
-        }
 
-        if (m_parser.isSet("ls")) {
-            m_options.exportVideo.leadingSec = doubleValue("ls");
-        }
-
-        if (m_parser.isSet("ts")) {
-            m_options.exportVideo.trailingSec = doubleValue("ts");
-        }
     }
 #endif
 
