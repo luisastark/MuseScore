@@ -25,6 +25,9 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QThread>
+#include <QStandardPaths>
+#include <QDir>
+#include <QTemporaryFile>
 
 #include "global/containers.h"
 #include "audio/iaudiooutput.h"
@@ -139,6 +142,78 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     .onReject(this, [](int errorCode, const std::string& msg) {
         LOGE() << "errorCode: " << errorCode << ", " << msg;
     });
+
+    while (!m_isCompleted) {
+        qApp->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
+    return m_writeRet;
+}
+
+Ret AbstractAudioWriter::doAudioWriteForMp4(INotationPtr notation)
+{
+    //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
+    //!     on any call from background thread. Once we have our own implementation of QIODevice
+    //!     we can pass QIODevice directly into IPlayback::IAudioOutput::saveSoundTrack
+
+    // To be used by videoexporter, in videowriter.cpp, videowriter composed by 3 steps
+    // Step 1 make a temp file .wav to store the audio to MUX later on
+
+    const muse::audio::SoundTrackFormat format {
+        muse::audio::SoundTrackType::WAV,
+        static_cast<muse::audio::sample_rate_t>(configuration()->exportSampleRate()),
+        configuration()->exportBufferSize(),
+        2 /* audioChannelsNumber */,
+        0 /* bitRate */
+    };
+
+    // Make a temp path to store the file
+    // TODO in the whole better
+
+    const QString path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    if (path.isEmpty())
+        return {};
+
+    m_isCompleted = false;
+    m_writeRet = muse::Ret();
+
+
+    playbackController()->setNotation(notation);
+    playbackController()->setIsExportingAudio(true);
+
+    m_progress.finished().onReceive(this, [this](const auto&) {
+        playbackController()->setIsExportingAudio(false);
+        playbackController()->setNotation(globalContext()->currentNotation());
+    });
+
+    playback()->sequenceIdList()
+        .onResolve(this, [this, path, &format](const muse::audio::TrackSequenceIdList& sequenceIdList) {
+            m_progress.start();
+
+            for (const muse::audio::TrackSequenceId sequenceId : sequenceIdList) {
+                playback()->audioOutput()->saveSoundTrackProgress(sequenceId).progressChanged()
+                .onReceive(this, [this](int64_t current, int64_t total, std::string title) {
+                    m_progress.progress(current, total, title);
+                });
+
+                playback()->audioOutput()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
+                    .onResolve(this, [this, path](const bool /*result*/) {
+                        LOGD() << "Successfully saved sound track by path: " << path;
+                        m_writeRet = muse::make_ok();
+                        m_isCompleted = true;
+                        m_progress.finish(muse::make_ok());
+                    })
+                    .onReject(this, [this](int errorCode, const std::string& msg) {
+                        m_writeRet = muse::Ret(errorCode, msg);
+                        m_isCompleted = true;
+                        m_progress.finish(muse::make_ret(errorCode, msg));
+                    });
+            }
+        })
+        .onReject(this, [](int errorCode, const std::string& msg) {
+            LOGE() << "errorCode: " << errorCode << ", " << msg;
+        });
 
     while (!m_isCompleted) {
         qApp->processEvents();
