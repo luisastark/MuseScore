@@ -42,16 +42,18 @@ ExportSettingsPage {
             navigation.accessible.name: resolutionLabel.text + " " + currentText
 
             model: [
+                { text: "3840x2160 (4K)", value: "2160p" },
+                { text: "2560x1440 (QHD)", value: "1440p" },
                 { text: "1920x1080 (Full HD)", value: "1080p" },
                 { text: "1280x720 (HD)", value: "720p" },
                 { text: "854x480 (SD)", value: "480p" },
                 { text: "640x360 (nHD)", value: "360p" }
             ]
 
-            currentIndex: indexOfValue(root.model.resolution)
+            currentIndex: indexOfValue(root.model.mp4Resolution)
 
             onActivated: function(index, value) {
-                root.model.resolution = value
+                root.model.mp4Resolution = value
             }
         }
     }
@@ -74,10 +76,10 @@ ExportSettingsPage {
                 { text: "24 fps", value: 24 }
             ]
 
-            currentIndex: indexOfValue(root.model.framerate)
+            currentIndex: indexOfValue(root.model.mp4Fps)
 
             onActivated: function(index, value) {
-                root.model.framerate = value
+                root.model.mp4Fps = value
             }
         }
     }

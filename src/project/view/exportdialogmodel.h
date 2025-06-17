@@ -83,6 +83,9 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
 
+    Q_PROPERTY(QString mp4Resolution READ mp4Resolution WRITE setMp4Resolution NOTIFY mp4ResolutionChanged)
+    Q_PROPERTY(int mp4Fps READ mp4Fps WRITE setMp4Fps NOTIFY mp4FpsChanged)
+
     Q_PROPERTY(bool midiExpandRepeats READ midiExpandRepeats WRITE setMidiExpandRepeats NOTIFY midiExpandRepeatsChanged)
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
 
@@ -156,8 +159,8 @@ public:
     iex::videoexport::PianoPosition mp4PianoPosition() const;
     void setMp4PianoPosition(iex::videoexport::PianoPosition position);
    
-    std::string mp4Resolution() const;
-    void setMp4Resolution(std::string resolution);
+    QString mp4Resolution() const;
+    void setMp4Resolution(QString resolution);
     
     int mp4Fps() const;
     void setMp4Fps(int fps);
@@ -216,6 +219,9 @@ signals:
     void sampleRateChanged(int sampleRate);
     void availableBitRatesChanged();
     void bitRateChanged(int bitRate);
+
+    void mp4ResolutionChanged(QString resolution);
+    void mp4FpsChanged(int fps);
 
     void midiExpandRepeatsChanged(bool expandRepeats);
     void midiExportRpnsChanged(bool exportRpns);

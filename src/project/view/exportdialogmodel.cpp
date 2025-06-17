@@ -550,13 +550,19 @@ void ExportDialogModel::setMp4PianoPosition(mu::iex::videoexport::PianoPosition 
 {
     return videoExportConfiguration()->setPianoPosition(position);
 }
-std::string ExportDialogModel::mp4Resolution() const
+QString ExportDialogModel::mp4Resolution() const
 {
-    return videoExportConfiguration()->resolution();
+
+    return QString::fromStdString(videoExportConfiguration()->resolution());
 }
-void ExportDialogModel::setMp4Resolution(std::string resolution)
+void ExportDialogModel::setMp4Resolution(QString resolution)
 {
-    return videoExportConfiguration()->setResolution(resolution);
+    if (resolution == mp4Resolution()) {
+        return;
+    }
+
+    videoExportConfiguration()->setResolution(resolution.toStdString());
+    emit mp4ResolutionChanged(resolution);
 }
 int ExportDialogModel::mp4Fps() const
 {
@@ -564,6 +570,12 @@ int ExportDialogModel::mp4Fps() const
 }
 void ExportDialogModel::setMp4Fps(int fps)
 {
+    if (fps == mp4Fps()) {
+        return;
+    }
+
+    videoExportConfiguration()->setFps(fps);
+    emit mp4FpsChanged(fps);
     return videoExportConfiguration()->setFps(fps);
 }
 double ExportDialogModel::mp4LeadingSec() const
