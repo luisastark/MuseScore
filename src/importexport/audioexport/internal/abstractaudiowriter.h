@@ -50,14 +50,15 @@ public:
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
     muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
                         const Options& options = Options()) override;
+    muse::Ret doAudioWriteForMp4(notation::INotationPtr notation);
 
     muse::Progress* progress() override;
     void abort() override;
 
 protected:
     muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
-
-private:
+    
+    private:
     UnitType unitTypeFromOptions(const Options& options) const;
 
     muse::Progress m_progress;

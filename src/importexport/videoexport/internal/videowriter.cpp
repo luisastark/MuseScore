@@ -123,6 +123,10 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, muse::i
         return make_ret(muse::Ret::Code::InternalError);
     }
 
+    // Step 1 make the temp audio file using the function in abstractaudiowriter
+    // muse::Ret doAudioWriteForMp4(notation::INotationPtr notation);
+
+    // Step 2 of the video exporter, make the .mp4 file with the frames
     VideoEncoder encoder;
     if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
         LOGE() << "failed open encoder";
@@ -262,8 +266,36 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, muse::i
 
     encoder.close();
 
+    /*
+
+    === Step 3 of the video exporter MUX (COMBINE) THE TWO TEMP FILES USING FFMPEG CLI ===
+    QString finalPath = QString::fromStdString(dstDevice.meta("file_path"));
+    IF_ASSERT_FAILED(!finalPath.isEmpty()) {
+        return make_ret(muse::Ret::Code::InternalError);
+    }
+
+    LOGI() << "Muxing pass: combining video and audio into final output: " << finalPath.toStdString();
+
+    // Use QProcess for better argument handling than system()
+    QString program = "ffmpeg";
+    QStringList arguments;
+    arguments << "-i" << tempVideoPath
+              << "-i" << tempWavPath
+              << "-c:v" << "copy"        // Stream-copy video (fast, no quality loss)
+              << "-c:a" << "aac"         // Encode audio to AAC (standard for MP4)
+              << "-b:a" << "192k"        // Set audio bitrate
+              << "-shortest"             // Finish when the shortest input (video or audio) ends
+              << "-y"                    // Overwrite output file without asking
+              << finalPath;
+
+    QProcess ffmpegProcess;
+    ffmpegProcess.start(program, arguments);
+    
+    */
+
     return muse::make_ok();
 }
+
 muse::Ret VideoWriter::writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
